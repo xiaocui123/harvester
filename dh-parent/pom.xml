@@ -82,6 +82,7 @@
         <guava.version>19.0</guava.version>
         <javatuples.version>1.2</javatuples.version>
         <pagehelper.version>5.0.1</pagehelper.version>
+        <jackan.version>0.4.2</jackan.version>
         <!--插件版本变量 end-->
 
         <!--其他变量 start-->
@@ -387,6 +388,18 @@
                 <groupId>org.javatuples</groupId>
                 <artifactId>javatuples</artifactId>
                 <version>${javatuples.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.trentorise.opendata</groupId>
+                <artifactId>jackan</artifactId>
+                <version>${jackan.version}</version>
             </dependency>
 
 
