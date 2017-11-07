@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.harvester.manage.mapper.SysRolePermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.harvester.manage.pojo.SysRolePermission" >
+    <id column="rp_id" property="rpId" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="permission_id" property="permissionId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rp_id, role_id, permission_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role_permission
+    where rp_id = #{rpId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_role_permission
+    where rp_id = #{rpId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.harvester.manage.pojo.SysRolePermission" >
+    insert into sys_role_permission (rp_id, role_id, permission_id
+      )
+    values (#{rpId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.harvester.manage.pojo.SysRolePermission" >
+    insert into sys_role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rpId != null" >
+        rp_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="permissionId != null" >
+        permission_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rpId != null" >
+        #{rpId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null" >
+        #{permissionId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.harvester.manage.pojo.SysRolePermission" >
+    update sys_role_permission
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null" >
+        permission_id = #{permissionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rp_id = #{rpId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.harvester.manage.pojo.SysRolePermission" >
+    update sys_role_permission
+    set role_id = #{roleId,jdbcType=VARCHAR},
+      permission_id = #{permissionId,jdbcType=VARCHAR}
+    where rp_id = #{rpId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryBySysRole" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_role_permission
+    where role_id = #{sysRoleId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteBySysRole" parameterType="java.lang.String">
+    delete from sys_role_permission
+    where role_id = #{sysRoleId,jdbcType=VARCHAR}
+  </delete>
+</mapper>

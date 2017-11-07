@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.harvester.manage.mapper.SysMenuInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.harvester.manage.pojo.SysMenuInfo" >
+    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="permission_id" property="permissionId" jdbcType="VARCHAR" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+    <result column="menu_class" property="menuClass" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="display_order" property="displayOrder" jdbcType="INTEGER" />
+    <result column="menu_status" property="menuStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    menu_id, permission_id, menu_name, menu_url, menu_class, parent_id, display_order, 
+    menu_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_t_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_t_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.harvester.manage.pojo.SysMenuInfo" >
+    insert into sys_t_menu (menu_id, permission_id, menu_name, 
+      menu_url, menu_class, parent_id, 
+      display_order, menu_status)
+    values (#{menuId,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, 
+      #{menuUrl,jdbcType=VARCHAR}, #{menuClass,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{displayOrder,jdbcType=INTEGER}, #{menuStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.harvester.manage.pojo.SysMenuInfo" >
+    insert into sys_t_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="permissionId != null" >
+        permission_id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="menuUrl != null" >
+        menu_url,
+      </if>
+      <if test="menuClass != null" >
+        menu_class,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+      <if test="menuStatus != null" >
+        menu_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null" >
+        #{permissionId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuClass != null" >
+        #{menuClass,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="menuStatus != null" >
+        #{menuStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.harvester.manage.pojo.SysMenuInfo" >
+    update sys_t_menu
+    <set >
+      <if test="permissionId != null" >
+        permission_id = #{permissionId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        menu_url = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuClass != null" >
+        menu_class = #{menuClass,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="menuStatus != null" >
+        menu_status = #{menuStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.harvester.manage.pojo.SysMenuInfo" >
+    update sys_t_menu
+    set permission_id = #{permissionId,jdbcType=VARCHAR},
+      menu_name = #{menuName,jdbcType=VARCHAR},
+      menu_url = #{menuUrl,jdbcType=VARCHAR},
+      menu_class = #{menuClass,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      display_order = #{displayOrder,jdbcType=INTEGER},
+      menu_status = #{menuStatus,jdbcType=VARCHAR}
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+  <select id="queryByUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+	<include refid="Base_Column_List"/>
+    FROM
+        sys_t_menu
+    INNER JOIN (
+	SELECT
+		sys_role_permission.permission_id AS srp_permission
+	FROM
+		sys_role_permission
+	INNER JOIN (
+		SELECT
+			role_id
+		FROM
+			sys_user_role
+		WHERE
+			sys_user_role.user_id = #{userId}
+	    ) tmp ON sys_role_permission.role_id = tmp.role_id
+    ) irp ON sys_t_menu.menu_id = irp.srp_permission
+  </select>
+
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_t_menu
+    order by display_order
+  </select>
+</mapper>

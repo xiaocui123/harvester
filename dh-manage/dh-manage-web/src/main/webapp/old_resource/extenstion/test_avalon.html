@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+</head>
+<body 
+      ms-controller="aa">
+	<script src="avalon/avalon.js"></script>
+	<div ms-repeat="aaa.abc">{{$key}}:{{$val}}</div>
+
+	
+	<script>
+	var aa = avalon.define({
+		$id:"aa",
+
+		aaa : {
+            abc:{
+                "号码号牌" : "鲁B08910",
+                "号牌种类" : "中型拖拉机",
+                "识别车型" : "红旗",
+                "车身颜色" : "银白色"
+            }
+		}
+	})
+	setTimeout(function() {
+		aa.aaa.abc= {
+			"号码号牌" : "鲁B00",
+			"号牌种类" : "中型拖拉机",
+			"识别车型" : "红旗",
+			"车身颜色" : "银白色"
+		}
+	},1000)
+	setTimeout(function() {
+		aa.aaa.abc= {
+			"号码号牌" : "dgsdf ",
+			"号牌种类" : "中型拖拉机",
+			"识别车型" : "红旗",
+			"车身颜色" : "银白色"
+		}
+	},2000)
+	setTimeout(function() {
+		aa.aaa.abc= {
+			"号码号牌" : "鲁aaaa",
+			"号牌种类" : "中型拖拉机",
+			"识别车型" : "红旗",
+			"车身颜色" : "银白色"
+		}
+	},3000)
+
+	avalon.scan()
+
+	</script>
+
+</body>
+</html>

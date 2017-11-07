@@ -1,0 +1,83 @@
+
+
+<html>
+    <head>
+        <title>js unit</title>
+        <meta http-equiv="pragma" content="no-cache">
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="content-type" content="text/html; charset=gbk"/>
+		<script type="text/javascript" src="jquery-1.8.3.js" ></script>
+        <script type='text/javascript' >
+ 
+			function handler(which){
+			    if(which=='isDistri'){		//是否为布控车
+					jQuery.ajax({
+						 type: "GET",
+						 url: "http://192.168.2.123:8080/qdgakk3.1/alarmMng!getDisCar.action",
+						 data: {plateNum:"Â³B3LT37", plateType:'02'},
+						 dataType: "jsonp",
+						 jsonp:'alarm',                  
+						 success: function(equipmentVO){
+								  //alert(equipmentVO[0].distriPolice);
+								  console.dir(equipmentVO)
+						 }
+					});
+				}else if(which=='query'){		//通过车辆查询
+					var query = {
+							   "beginTime":"2015/03/03 11:13:34",
+							   "endTime":"2015/06/03 11:13:34",
+							   "num":"Â³B07648",
+							   "nType":"41",
+							   "carColor":"Z",
+							   "kako":"105,37020000399",
+							   "pageNum":"0",				//当前页数
+							   "pageSize":"10",				//当页条数
+							   "sort":""					//排序字段
+							   
+						   }
+					jQuery.ajax({		//通过车辆分组
+						 type: "GET",
+						 url: "http://192.168.2.123:8080/qdgakk3.1/passData!queryPass.action",
+						 data: query,
+						 dataType: "jsonp",
+						 jsonp:'query',                  
+						 success: function(equipmentVO){
+								  alert(equipmentVO.list[0].plateNum);
+						 }
+					});
+				}else if(which=='group'){
+				    var query = {	//分组
+								   "beginTime":"2015/03/03 11:13:34",
+								   "endTime":"2015/06/03 11:13:34",
+								   "field":"plateNumNond"		//分组字段
+
+							   }
+					jQuery.ajax({
+						 type: "GET",
+						 url: "http://192.168.2.123:8080/qdgakk3.1/passData!queryGroup.action",
+						 data: query,
+						 dataType: "jsonp",
+						 jsonp:'group',                  
+						 success: function(equipmentVO){
+								  alert(equipmentVO);
+						 }
+					});
+				}
+				
+			}
+			
+        </script>
+		
+		
+    </head>
+    <body  id="passTrackbody"  >
+	
+	<input type="button" value="ÊÇ·ñÊÇ²¼¿Ø³µ" onclick="handler('isDistri')" />
+	<input type="button" value="Í¨¹ý³µÁ¾²éÑ¯" onclick="handler('query')" />
+	<input type="button" value="Í¨¹ý³µÁ¾·Ö×é" onclick="handler('group')" />
+    </body>
+</html>
+
+
+
+

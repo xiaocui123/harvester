@@ -1,0 +1,94 @@
+package com.harvester.generator.helper;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by cui on 2017/11/3.
+ */
+@Component("harvesterconfig")
+public class HarvesterConfig {
+
+    //tds服务catalog.xml目录
+    @Value("${tds.content.root.path}")
+    private String tdsRootPath;
+
+    //tds 服务地址
+    @Value("${tds.server.url}")
+    private String tdsServerUrl;
+
+    //nc 文件存放路径
+    @Value("${nc.file.path}")
+    private String ncFilePath;
+
+    //ckan服务地址
+    @Value("${ckan.url}")
+    private String ckanSeverUrl;
+
+    //sysadmin token
+    @Value("${ckan.token}")
+    private String ckanToken;
+
+    //默认机构ID msdc
+    @Value("${ckan.organization}")
+    private String defaultOrganization;
+
+    @Value("${tds.dap.root.url}")
+    private String TdsDapRootUrl;
+
+    public String getTdsRootPath() {
+        return tdsRootPath;
+    }
+
+    public void setTdsRootPath(String tdsRootPath) {
+        this.tdsRootPath = tdsRootPath;
+    }
+
+    public String getTdsServerUrl() {
+        return tdsServerUrl;
+    }
+
+    public void setTdsServerUrl(String tdsServerUrl) {
+        this.tdsServerUrl = tdsServerUrl;
+    }
+
+    public String getNcFilePath() {
+        return ncFilePath;
+    }
+
+    public void setNcFilePath(String ncFilePath) {
+        this.ncFilePath = ncFilePath;
+    }
+
+    public String getCkanSeverUrl() {
+        return ckanSeverUrl;
+    }
+
+    public void setCkanSeverUrl(String ckanSeverUrl) {
+        this.ckanSeverUrl = ckanSeverUrl;
+    }
+
+    public String getCkanToken() {
+        return ckanToken;
+    }
+
+    public void setCkanToken(String ckanToken) {
+        this.ckanToken = ckanToken;
+    }
+
+    public String getDefaultOrganization() {
+        return defaultOrganization;
+    }
+
+    public void setDefaultOrganization(String defaultOrganization) {
+        this.defaultOrganization = defaultOrganization;
+    }
+
+    public String getTdsDapRootUrl() {
+        return TdsDapRootUrl;
+    }
+
+    public void setTdsDapRootUrl(String tdsDapRootUrl) {
+        TdsDapRootUrl = tdsDapRootUrl;
+    }
+}

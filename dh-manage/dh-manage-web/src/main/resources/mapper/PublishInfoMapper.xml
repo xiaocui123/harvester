@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.harvester.manage.mapper.PublishInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.harvester.manage.pojo.PublishInfo" >
+    <id column="publish_id" property="publishId" jdbcType="VARCHAR" />
+    <result column="publish_resource_id" property="publishResourceId" jdbcType="VARCHAR" />
+    <result column="publish_resource_type" property="publishResourceType" jdbcType="CHAR" />
+    <result column="publish_successful" property="publishSuccessful" jdbcType="BIT" />
+    <result column="publish_error" property="publishError" jdbcType="VARCHAR" />
+    <result column="publish_user" property="publishUser" jdbcType="VARCHAR" />
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="publish_url" property="publishUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    publish_id, publish_resource_id, publish_resource_type, publish_successful, publish_error, 
+    publish_user, publish_time, publish_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dh_publish
+    where publish_id = #{publishId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dh_publish
+    where publish_id = #{publishId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.harvester.manage.pojo.PublishInfo" >
+    insert into dh_publish (publish_id, publish_resource_id, publish_resource_type, 
+      publish_successful, publish_error, publish_user, 
+      publish_time, publish_url)
+    values (#{publishId,jdbcType=VARCHAR}, #{publishResourceId,jdbcType=VARCHAR}, #{publishResourceType,jdbcType=CHAR}, 
+      #{publishSuccessful,jdbcType=BIT}, #{publishError,jdbcType=VARCHAR}, #{publishUser,jdbcType=VARCHAR}, 
+      #{publishTime,jdbcType=TIMESTAMP}, #{publishUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.harvester.manage.pojo.PublishInfo" >
+    insert into dh_publish
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="publishId != null" >
+        publish_id,
+      </if>
+      <if test="publishResourceId != null" >
+        publish_resource_id,
+      </if>
+      <if test="publishResourceType != null" >
+        publish_resource_type,
+      </if>
+      <if test="publishSuccessful != null" >
+        publish_successful,
+      </if>
+      <if test="publishError != null" >
+        publish_error,
+      </if>
+      <if test="publishUser != null" >
+        publish_user,
+      </if>
+      <if test="publishTime != null" >
+        publish_time,
+      </if>
+      <if test="publishUrl != null" >
+        publish_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="publishId != null" >
+        #{publishId,jdbcType=VARCHAR},
+      </if>
+      <if test="publishResourceId != null" >
+        #{publishResourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="publishResourceType != null" >
+        #{publishResourceType,jdbcType=CHAR},
+      </if>
+      <if test="publishSuccessful != null" >
+        #{publishSuccessful,jdbcType=BIT},
+      </if>
+      <if test="publishError != null" >
+        #{publishError,jdbcType=VARCHAR},
+      </if>
+      <if test="publishUser != null" >
+        #{publishUser,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishUrl != null" >
+        #{publishUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.harvester.manage.pojo.PublishInfo" >
+    update dh_publish
+    <set >
+      <if test="publishResourceId != null" >
+        publish_resource_id = #{publishResourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="publishResourceType != null" >
+        publish_resource_type = #{publishResourceType,jdbcType=CHAR},
+      </if>
+      <if test="publishSuccessful != null" >
+        publish_successful = #{publishSuccessful,jdbcType=BIT},
+      </if>
+      <if test="publishError != null" >
+        publish_error = #{publishError,jdbcType=VARCHAR},
+      </if>
+      <if test="publishUser != null" >
+        publish_user = #{publishUser,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishUrl != null" >
+        publish_url = #{publishUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where publish_id = #{publishId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.harvester.manage.pojo.PublishInfo" >
+    update dh_publish
+    set publish_resource_id = #{publishResourceId,jdbcType=VARCHAR},
+      publish_resource_type = #{publishResourceType,jdbcType=CHAR},
+      publish_successful = #{publishSuccessful,jdbcType=BIT},
+      publish_error = #{publishError,jdbcType=VARCHAR},
+      publish_user = #{publishUser,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      publish_url = #{publishUrl,jdbcType=VARCHAR}
+    where publish_id = #{publishId,jdbcType=VARCHAR}
+  </update>
+</mapper>
