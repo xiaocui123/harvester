@@ -5,6 +5,10 @@ import java.util.Date;
 public class PublishInfo {
     private String publishId;
 
+    private String publishDatasetName;
+
+    private String publishDatasetDescription;
+
     private String publishResourceId;
 
     private String publishResourceType;
@@ -19,12 +23,30 @@ public class PublishInfo {
 
     private String publishUrl;
 
+    private String publishCkanDatasetId;
+
     public String getPublishId() {
         return publishId;
     }
 
     public void setPublishId(String publishId) {
         this.publishId = publishId == null ? null : publishId.trim();
+    }
+
+    public String getPublishDatasetName() {
+        return publishDatasetName;
+    }
+
+    public void setPublishDatasetName(String publishDatasetName) {
+        this.publishDatasetName = publishDatasetName;
+    }
+
+    public String getPublishDatasetDescription() {
+        return publishDatasetDescription;
+    }
+
+    public void setPublishDatasetDescription(String publishDatasetDescription) {
+        this.publishDatasetDescription = publishDatasetDescription;
     }
 
     public String getPublishResourceId() {
@@ -81,5 +103,13 @@ public class PublishInfo {
 
     public void setPublishUrl(String publishUrl) {
         this.publishUrl = publishUrl == null ? null : publishUrl.trim();
+    }
+
+    public String getPublishCkanDatasetId() {
+        return publishCkanDatasetId;
+    }
+
+    public void setPublishCkanDatasetId(String publishCkanDatasetId) {
+        this.publishCkanDatasetId = publishCkanDatasetId;
     }
 }

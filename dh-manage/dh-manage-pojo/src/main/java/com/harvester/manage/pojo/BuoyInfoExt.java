@@ -4,10 +4,20 @@ package com.harvester.manage.pojo;
  * Created by cui on 2017/11/6.
  */
 public class BuoyInfoExt extends BuoyInfo {
+    //数据集名称
+    private String publishDatasetName;
     //是否发布过
     private boolean published;
     //发布URL
     private String publishUrl;
+
+    public String getPublishDatasetName() {
+        return publishDatasetName;
+    }
+
+    public void setPublishDatasetName(String publishDatasetName) {
+        this.publishDatasetName = publishDatasetName;
+    }
 
     public boolean isPublished() {
         return published;

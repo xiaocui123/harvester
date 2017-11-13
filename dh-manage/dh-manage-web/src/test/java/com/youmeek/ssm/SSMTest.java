@@ -1,6 +1,7 @@
 package com.youmeek.ssm;
 
 import com.harvester.generator.AdcpNcGeneratorV2;
+import com.harvester.generator.NutrientGeoGenerator;
 import com.harvester.generator.StationSerialDataGenerator;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -32,6 +33,12 @@ public class SSMTest {
         StationSerialDataGenerator generator = new StationSerialDataGenerator();
         generator.initTimeSerial(new File("E:\\content\\thredds\\public\\testdata\\station_buoy\\adcp\\tabshzh.xml"));
         generator.generate();
+    }
+
+    @Test
+    public void testGeoGenerator(){
+        NutrientGeoGenerator generator=new NutrientGeoGenerator();
+        generator.generator(new File("E:\\content\\thredds\\public\\testdata\\routes\\nutrients\\nutrients.xlsx"));
     }
 
 }

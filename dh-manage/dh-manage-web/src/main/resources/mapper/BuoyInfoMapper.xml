@@ -12,6 +12,7 @@
   </resultMap>
 
   <resultMap id="BuoyInfoExt" type="com.harvester.manage.pojo.BuoyInfoExt" extends="BaseResultMap">
+    <result column="publish_dataset_name" property="publishDatasetName" jdbcType="VARCHAR"/>
     <result column="published" property="published" jdbcType="BIT"/>
     <result column="publish_url" property="publishUrl" jdbcType="VARCHAR"/>
   </resultMap>
@@ -137,13 +138,15 @@
         FALSE,
         TRUE
     ) AS published,
-     publish.publish_url
+     publish.publish_url,
+     publish.publish_dataset_name
     FROM
         buoy
     LEFT JOIN (
         SELECT
             publish_resource_id,
-            publish_url
+            publish_url,
+            publish_dataset_name
         FROM
             dh_publish
     ) publish ON buoy.buoy_nc_id = publish.publish_resource_id

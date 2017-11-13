@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import com.harvester.generator.helper.AccessConnectionInfo;
 import com.harvester.generator.helper.HarvesterConfig;
 import com.harvester.generator.helper.SpringContextUtil;
@@ -12,13 +13,8 @@ import com.harvester.station.config.*;
 import org.javatuples.Pair;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ucar.ma2.*;
 import ucar.ma2.Array;
 import ucar.nc2.Attribute;
@@ -36,13 +32,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
+import java.util.UUID;
 
 /**
  * 定点浮标时间序列数据NC文件生成器
  * Created by cui on 2017/10/30.
  */
 public class StationSerialDataGenerator {
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Timeserial timeserial;
 
@@ -73,7 +70,7 @@ public class StationSerialDataGenerator {
             this.timeserial = (Timeserial) jaxbUnmarshaller.unmarshal(file);
 
             HarvesterConfig harvesterConfig = (HarvesterConfig) SpringContextUtil.getBean("harvesterconfig");
-            this.rootDirPath = harvesterConfig.getNcFilePath();
+            this.rootDirPath = harvesterConfig.getBuoyFilePath();
 
         } catch (JAXBException e) {
             throw new IllegalArgumentException("解析浮标配置文件失败！", e);
@@ -82,11 +79,20 @@ public class StationSerialDataGenerator {
 
     public BuoyInfo generate() {
         BuoyInfo buoyInfo = new BuoyInfo();
+        String uuid = UUID.randomUUID().toString();
+        buoyInfo.setBuoyNcId(uuid);
         NetcdfFileWriter dataFile = null;
         String fileName = timeserial.getFileName();
+        String ncFilePath = rootDirPath + uuid + File.separator + fileName;
+        try {
+            Files.createParentDirs(new File(ncFilePath));
+        } catch (IOException e) {
+            logger.info("生成NC文件父目录失败！");
+            throw new IllegalArgumentException(e);
+        }
         Preconditions.checkArgument(!Strings.isNullOrEmpty(fileName), "nc文件名称为空！");
         try (Connection connection = getConnection()) {
-            dataFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, rootDirPath + fileName);
+            dataFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ncFilePath);
 
             Pair<String, String> timeScopePair = getTimeScope(connection);
 
@@ -102,14 +108,15 @@ public class StationSerialDataGenerator {
 
             //写测量数据
             doMeasuredVarWrite2(dataFile, connection, timeScopePair, rowSizeAndObsValues);
+            logger.info("浮标数据【" + ncFilePath + "】生成成功！");
 
             buoyInfo.setBuoyNcTable(timeserial.getTableName());
             buoyInfo.setBuoyNcStarttime(timeScopePair.getValue0());
             buoyInfo.setBuoyNcEndtime(timeScopePair.getValue1());
-            buoyInfo.setBuoyNcFilepath(rootDirPath + fileName);
+            buoyInfo.setBuoyNcFilepath(ncFilePath);
             return buoyInfo;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("浮标数据生成失败！" + e.getMessage(), e);
         } finally {
             if (null != dataFile) {
                 try {

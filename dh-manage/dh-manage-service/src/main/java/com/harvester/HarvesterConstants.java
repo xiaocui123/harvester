@@ -10,11 +10,12 @@ public interface HarvesterConstants {
 
     String TDS_CATALOG_FILE = "catalog.xml";
 
-    String DEFAULT_RESOURCE_TYPE = "nc";
+    String DEFAULT_RESOURCE_TYPE = "OPeNDAP";
 
     //浮标、共享数据、船基
     String RESOURCE_BUOY_TYPE = "BUOY";
     String RESOURCE_SHARED_TYPE = "SHARED";
-    String RESOURCE_ROUTES_TYPE = "ROUTES";
+    String RESOURCE_ROUTES_NUTRIENT_TYPE = "ROUTES_NUTRIENT";
+    String RESOURCE_ROUTES_CTD="ROUTES_CTD";
 
 }

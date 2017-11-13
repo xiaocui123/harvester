@@ -13,13 +13,19 @@ public class HarvesterConfig {
     @Value("${tds.content.root.path}")
     private String tdsRootPath;
 
-    //tds 服务地址
+    //helper 服务地址
     @Value("${tds.server.url}")
     private String tdsServerUrl;
 
     //nc 文件存放路径
-    @Value("${nc.file.path}")
-    private String ncFilePath;
+    @Value("${buoy.file.path}")
+    private String buoyFilePath;
+
+    @Value("${ship.nutrient.file.path}")
+    private String shipNutrientFilePath;
+
+    @Value("${ship.ctd.file.path}")
+    private String sipCtdFilePath;
 
     //ckan服务地址
     @Value("${ckan.url}")
@@ -35,6 +41,9 @@ public class HarvesterConfig {
 
     @Value("${tds.dap.root.url}")
     private String TdsDapRootUrl;
+
+    @Value("${tds.httpserver.root.url}")
+    private String TdsHttpServerRootUrl;
 
     public String getTdsRootPath() {
         return tdsRootPath;
@@ -52,12 +61,28 @@ public class HarvesterConfig {
         this.tdsServerUrl = tdsServerUrl;
     }
 
-    public String getNcFilePath() {
-        return ncFilePath;
+    public String getBuoyFilePath() {
+        return buoyFilePath;
     }
 
-    public void setNcFilePath(String ncFilePath) {
-        this.ncFilePath = ncFilePath;
+    public void setBuoyFilePath(String buoyFilePath) {
+        this.buoyFilePath = buoyFilePath;
+    }
+
+    public String getShipNutrientFilePath() {
+        return shipNutrientFilePath;
+    }
+
+    public void setShipNutrientFilePath(String shipNutrientFilePath) {
+        this.shipNutrientFilePath = shipNutrientFilePath;
+    }
+
+    public String getSipCtdFilePath() {
+        return sipCtdFilePath;
+    }
+
+    public void setSipCtdFilePath(String sipCtdFilePath) {
+        this.sipCtdFilePath = sipCtdFilePath;
     }
 
     public String getCkanSeverUrl() {
@@ -90,5 +115,13 @@ public class HarvesterConfig {
 
     public void setTdsDapRootUrl(String tdsDapRootUrl) {
         TdsDapRootUrl = tdsDapRootUrl;
+    }
+
+    public String getTdsHttpServerRootUrl() {
+        return TdsHttpServerRootUrl;
+    }
+
+    public void setTdsHttpServerRootUrl(String tdsHttpServerRootUrl) {
+        TdsHttpServerRootUrl = tdsHttpServerRootUrl;
     }
 }

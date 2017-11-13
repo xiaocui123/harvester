@@ -34,6 +34,7 @@ $(function () {
                     return index + 1;
                 }
             },
+            {field: "publishDatasetName", title: "数据集名称", width: 100, valign: 'middle'},
             {field: "buoyNcTable", title: "表名称", width: 100, valign: 'middle'},
             {field: "buoyNcStarttimeStr", title: "开始时间", width: 100, valign: 'middle'},
             {field: "buoyNcEndtimeStr", title: "结束时间", width: 100, valign: 'middle'},
@@ -106,6 +107,36 @@ $(function () {
         bootbox.alert("定点浮标数据生成成功！");
         $("#grid").bootstrapTable('refresh');
     });
+
+    $('#publishBtn').click(function(){
+        var publish={
+            publishResourceId:$('#dataset-publish-modal').data('resourceid'),
+            publishDatasetName: $.trim($('#dataset-name-input').val()),
+            publishDatasetDescription: $.trim($('#dataset_desc').val()),
+            publishResourceType:"BUOY"
+        };
+
+        $.ajax({
+            url: path + '/publish/publish',
+            method: 'post',
+            dataType: "json",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(publish),
+            success: function (response) {
+                bootbox.alert("数据发布成功！",function(){
+                    $('#dataset-publish-modal').modal('hide')
+                    $("#grid").bootstrapTable('refresh');
+                });
+            },
+            error: function (response) {
+                bootbox.alert("response.message");
+            }
+        });
+    });
+
+    $('#buoy-delete-btn').click(function(){
+       gridBtnDel();
+    });
 });
 
 function gridBtnDownload(row) {
@@ -113,28 +144,49 @@ function gridBtnDownload(row) {
 }
 
 function gridBtnPublish(row){
-    var publish={
-        publishResourceId:row,
-        publishResourceType:"BUOY"
-    };
-
-    $.ajax({
-        url: path + '/publish/publish',
-        method: 'post',
-        dataType: "json",
-        contentType: 'application/json;charset=UTF-8',
-        data: JSON.stringify(publish),
-        success: function (response) {
-            bootbox.alert("数据发布成功！");
-            $("#grid").bootstrapTable('refresh');
-        },
-        error: function (response) {
-            bootbox.alert("response.message");
-        }
-    });
+    $('#dataset-name-input').val("");
+    $('#dataset_desc').val("");
+    $('#dataset-publish-modal').data("resourceid",row);
+    $('#dataset-publish-modal').modal('show');
 }
 
 function gridBtnPreview(resourceUrl){
     console.log(resourceUrl);
     window.open(resourceUrl);
+}
+
+function gridBtnDel() {
+    var selectContent = $("#grid").bootstrapTable('getSelections');
+    var ids = [];
+    if (selectContent.length > 0) {
+        $.each(selectContent,function(index,buoy){
+            ids.push(buoy.buoyNcId);
+        });
+        bootbox.setLocale("zh_CN");
+        bootbox.confirm("确定要删除吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: path + '/buoy/delete',
+                    method: 'post',
+                    dataType: "json",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(ids),
+                    success: function (response) {
+                        if (!response.success) {
+                            bootbox.alert(response.message);
+                        } else {
+                            bootbox.alert("删除数据成功！", function () {
+                                $("#grid").bootstrapTable('refresh');
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        bootbox.alert("error");
+                    }
+                });
+            }
+        });
+    } else {
+        bootbox.alert("请选择要删除的条目！")
+    }
 }

@@ -17,7 +17,7 @@ public class AccessConnectionInfo {
     @Value("${data_source_url}")
     private String url;
 
-    @Value("${nc.file.path}")
+    @Value("${buoy.file.path}")
     private String ncFilePath;
 
     public String getNcFilePath() {

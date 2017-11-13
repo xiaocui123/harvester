@@ -2,6 +2,8 @@ package com.harvester.manage.mapper;
 
 import com.harvester.manage.pojo.PublishInfo;
 
+import java.util.List;
+
 public interface PublishInfoMapper {
     int deleteByPrimaryKey(String publishId);
 
@@ -14,4 +16,6 @@ public interface PublishInfoMapper {
     int updateByPrimaryKeySelective(PublishInfo record);
 
     int updateByPrimaryKey(PublishInfo record);
+
+    List<PublishInfo> selectByResourceId(String resourceId);
 }

@@ -68,12 +68,16 @@ public class JackanTest {
 //
         CkanDatasetBase dataset = new CkanDatasetBase();
         dataset.setOwnerOrg("b66eba5e-cb2e-41f4-b4e4-74e318faeb48");
-        dataset.setName("my-cool-dataset-" + new Random().nextLong());
+        dataset.setTitle("中文测试名称");
+        dataset.setName("testt");
+        dataset.setNotes("测试介绍文字！");
+        dataset.setAuthor("作者");
 
         CkanResource resource=new CkanResource();
         resource.setUrl("http://my-department.org/expenses.csv");
-        resource.setName("testResourceName");
+        resource.setName("测试一下子");
         resource.setResourceType("csv");
+        resource.setDescription("描述信息描述信息");
         List<CkanResource> lstResource= Lists.newArrayList();
         lstResource.add(resource);
 
@@ -81,5 +85,11 @@ public class JackanTest {
 
         CkanDataset createdDataset = myClient.createDataset(dataset);
         System.out.println("create new dataset:"+createdDataset.getId());
+    }
+
+    @Test
+    public void testDelDataset(){
+        CkanClient myClient = new CheckedCkanClient("http://159.226.158.220:8088/", "ea8324ce-b07a-4616-b6f8-35f7ddbd57ad");
+        myClient.deleteDataset("bc9f6c1c-4461-4332-adab-0cb6de613dd3");
     }
 }
