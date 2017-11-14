@@ -1,6 +1,8 @@
 package com.harvester.manage.pojo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PublishInfo {
     private String publishId;
@@ -24,6 +26,9 @@ public class PublishInfo {
     private String publishUrl;
 
     private String publishCkanDatasetId;
+
+    //发布tags
+    private List<String> lstTagName;
 
     public String getPublishId() {
         return publishId;
@@ -111,5 +116,16 @@ public class PublishInfo {
 
     public void setPublishCkanDatasetId(String publishCkanDatasetId) {
         this.publishCkanDatasetId = publishCkanDatasetId;
+    }
+
+    public List<String> getLstTagName() {
+        if (lstTagName == null) {
+            lstTagName = new ArrayList<>();
+        }
+        return lstTagName;
+    }
+
+    public void setLstTagName(List<String> lstTagName) {
+        this.lstTagName = lstTagName;
     }
 }

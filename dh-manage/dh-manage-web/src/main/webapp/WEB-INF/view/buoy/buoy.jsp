@@ -5,9 +5,17 @@
 
 <link href="${ctx}/js/plugins/bootstraptable/bootstrap-table.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/resource/assets/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/resource/assets/bootstrap-tagsinput/css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css"/>
 <script>
     var path = "${ctx}";
 </script>
+
+<style>
+    .bootstrap-tagsinput {
+        display: block;
+    }
+</style>
+
 <div class="container" style="height: 100%; overflow-y: auto; overflow-x: no">
     <div class="row">
         <ul class="nav nav-tabs">
@@ -65,10 +73,20 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 第三行 -->
+                    <div class="input-group col-xs-12 clearfix ">
+                        <div class="col-xs-12">
+                            <div class="input-group form-group">
+                                <div class="input-group-addon">标签</div>
+                                <input id="tag" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer" id="edit-footer">
                     <button type="button" class="btn btn-primary text-center"
-                            id="publishBtn">保存</button>
+                            id="publishBtn">发布</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"
                             id="analySub">关闭</button>
                 </div>
@@ -81,4 +99,6 @@
 <script src="${ctx}/js/plugins/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
 <script src="${ctx}/resource/assets/bootstrap-fileinput/js/fileinput.js"></script>
 <script src="${ctx}/resource/assets/bootstrap-fileinput/js/fileinput_locale_zh.js"/>
+<script src="${ctx}/resource/assets/bootstrap-tagsinput/js/bootstrap-tagsinput.js"/>
+<script src="${ctx}/resource/assets/typeahead/typeahead.bundle.js"/>
 <script type="text/javascript" src="${ctx}/resource/js/view/buoy/buoy.js"></script>

@@ -109,10 +109,12 @@ $(function () {
     });
 
     $('#publishBtn').click(function(){
+        var tags=$("#tag").tagsinput('items');
         var publish={
             publishResourceId:$('#dataset-publish-modal').data('resourceid'),
             publishDatasetName: $.trim($('#dataset-name-input').val()),
             publishDatasetDescription: $.trim($('#dataset_desc').val()),
+            lstTagName: tags,
             publishResourceType:"BUOY"
         };
 
@@ -137,6 +139,30 @@ $(function () {
     $('#buoy-delete-btn').click(function(){
        gridBtnDel();
     });
+
+
+    //TODO
+    var citynames = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: {
+            url: path+'/resource/assets/typeahead/tags.json',
+            filter: function(list) {
+                return $.map(list, function(cityname) {
+                    return { name: cityname }; });
+            }
+        }
+    });
+    citynames.initialize();
+
+    $('#tag').tagsinput({
+        typeaheadjs: {
+            name: 'tags',
+            displayKey: 'name',
+            valueKey: 'name',
+            source: citynames.ttAdapter()
+        }
+    });
 });
 
 function gridBtnDownload(row) {
@@ -146,6 +172,7 @@ function gridBtnDownload(row) {
 function gridBtnPublish(row){
     $('#dataset-name-input').val("");
     $('#dataset_desc').val("");
+    $('#tag').tagsinput('removeAll');
     $('#dataset-publish-modal').data("resourceid",row);
     $('#dataset-publish-modal').modal('show');
 }

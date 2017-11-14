@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by cui on 2017/11/3.
@@ -69,12 +70,17 @@ public class JackanTest {
         CkanDatasetBase dataset = new CkanDatasetBase();
         dataset.setOwnerOrg("b66eba5e-cb2e-41f4-b4e4-74e318faeb48");
         dataset.setTitle("中文测试名称");
-        dataset.setName("testt");
+        dataset.setName("testtttttt");
         dataset.setNotes("测试介绍文字！");
         dataset.setAuthor("作者");
+        CkanTag tag=new CkanTag();
+        tag.setName("浮标数据");
+        List<CkanTag> tags=Lists.newArrayList();
+        tags.add(tag);
+        dataset.setTags(tags);
 
         CkanResource resource=new CkanResource();
-        resource.setUrl("http://my-department.org/expenses.csv");
+        resource.setUrl("http://my-department.org/expensestestetesttt.csv");
         resource.setName("测试一下子");
         resource.setResourceType("csv");
         resource.setDescription("描述信息描述信息");
@@ -91,5 +97,19 @@ public class JackanTest {
     public void testDelDataset(){
         CkanClient myClient = new CheckedCkanClient("http://159.226.158.220:8088/", "ea8324ce-b07a-4616-b6f8-35f7ddbd57ad");
         myClient.deleteDataset("bc9f6c1c-4461-4332-adab-0cb6de613dd3");
+    }
+
+    @Test
+    public void testTags(){
+        CkanClient myClient = new CheckedCkanClient("http://159.226.158.220:8088/", "ea8324ce-b07a-4616-b6f8-35f7ddbd57ad");
+        CkanVocabularyBase vocabulary=new CkanVocabularyBase();
+        vocabulary.setName("类型");
+        CkanVocabulary ckanVocabulary=myClient.createVocabulary(vocabulary);
+        String vocabularyId=ckanVocabulary.getId();
+
+        CkanTagBase tagBase=new CkanTagBase();
+        tagBase.setName("浮标");
+        tagBase.setVocabularyId(vocabularyId);
+        CkanTag tag=myClient.createTag(tagBase);
     }
 }
