@@ -4,12 +4,8 @@ import com.harvester.HarvesterConstants;
 import com.harvester.generator.helper.HarvesterConfig;
 import com.harvester.helper.CkanHelper;
 import com.harvester.helper.TdsHelper;
-import com.harvester.manage.mapper.BuoyInfoMapper;
-import com.harvester.manage.mapper.NutrientInfoMapper;
-import com.harvester.manage.mapper.PublishInfoMapper;
-import com.harvester.manage.pojo.BuoyInfo;
-import com.harvester.manage.pojo.NutrientInfo;
-import com.harvester.manage.pojo.PublishInfo;
+import com.harvester.manage.mapper.*;
+import com.harvester.manage.pojo.*;
 import com.harvester.manage.service.PublishService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +26,13 @@ public class PublishServiceImpl implements PublishService {
     private BuoyInfoMapper buoyInfoMapper;
 
     @Autowired
+    private SharedInfoMapper sharedInfoMapper;
+
+    @Autowired
     private NutrientInfoMapper nutrientInfoMapper;
+
+    @Autowired
+    private CtdInfoMapper ctdInfoMapper;
 
     @Autowired
     private HarvesterConfig harvesterConfig;
@@ -74,17 +76,25 @@ public class PublishServiceImpl implements PublishService {
     private String getFileName(PublishInfo publishInfo) {
         String publishResourceType = publishInfo.getPublishResourceType();
         String resourceId = publishInfo.getPublishResourceId();
-        //浮标
         if (HarvesterConstants.RESOURCE_BUOY_TYPE.equals(publishResourceType)) {
+            //浮标
             BuoyInfo buoyInfo = buoyInfoMapper.selectByPrimaryKey(resourceId);
             String filePath = buoyInfo.getBuoyNcFilepath();
             return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         } else if (HarvesterConstants.RESOURCE_SHARED_TYPE.equals(publishResourceType)) {
-            //TODO 共享数据
+            //共享数据
+            SharedInfo sharedInfo = sharedInfoMapper.selectByPrimaryKey(resourceId);
+            String filePath = sharedInfo.getSharedNcFilepath();
+            return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         } else if (HarvesterConstants.RESOURCE_ROUTES_NUTRIENT_TYPE.equals(publishResourceType)) {
-            //TODO 船基调查-营养盐
+            //船基调查-营养盐
             NutrientInfo nutrientInfo = nutrientInfoMapper.selectByPrimaryKey(resourceId);
             String filePath = nutrientInfo.getNutrientNcFilepath();
+            return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+        } else if (HarvesterConstants.RESOURCE_ROUTES_CTD.equals(publishResourceType)) {
+            //船基调查-CTD
+            CtdInfo ctdInfo = ctdInfoMapper.selectByPrimaryKey(resourceId);
+            String filePath = ctdInfo.getCtdNcFilepath();
             return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         }
         throw new IllegalArgumentException("不支持【" + publishResourceType + "】资源类型的数据发布！");
@@ -96,10 +106,14 @@ public class PublishServiceImpl implements PublishService {
         if (HarvesterConstants.RESOURCE_BUOY_TYPE.equals(resourceType)) {
             relativePath = "test/station_buoy/" + publishInfo.getPublishResourceId() + "/" + fileName;
         } else if (HarvesterConstants.RESOURCE_SHARED_TYPE.equals(resourceType)) {
-            //TODO
+            //共享
+            relativePath = "test/shared/" + publishInfo.getPublishResourceId() + "/" + fileName;
         } else if (HarvesterConstants.RESOURCE_ROUTES_NUTRIENT_TYPE.equals(resourceType)) {
-            //TODO 船基调查-营养盐
+            //船基调查-营养盐
             relativePath = "test/routes/nutrients/" + publishInfo.getPublishResourceId() + "/" + fileName;
+        } else if (HarvesterConstants.RESOURCE_ROUTES_CTD.equals(resourceType)) {
+            //船基调查-CTD
+            relativePath = "test/routes/ctd/" + publishInfo.getPublishResourceId() + "/" + fileName;
         } else {
             throw new IllegalArgumentException("不支持【" + resourceType + "】资源类型的数据发布！");
         }

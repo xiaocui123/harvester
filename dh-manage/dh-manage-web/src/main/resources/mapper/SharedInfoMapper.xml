@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.harvester.manage.mapper.SharedInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.harvester.manage.pojo.SharedInfo" >
+    <id column="share_id" property="shareId" jdbcType="VARCHAR" />
+    <result column="shared_name" property="sharedName" jdbcType="VARCHAR" />
+    <result column="shared_generator" property="sharedGenerator" jdbcType="VARCHAR" />
+    <result column="shared_generate_time" property="sharedGenerateTime" jdbcType="TIMESTAMP" />
+    <result column="shared_nc_filepath" property="sharedNcFilepath" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="SharedInfoExt" type="com.harvester.manage.pojo.SharedInfoExt" extends="BaseResultMap">
+    <result column="publish_dataset_name" property="publishDatasetName" jdbcType="VARCHAR"/>
+    <result column="published" property="published" jdbcType="BIT"/>
+    <result column="publish_url" property="publishUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    share_id, shared_name, shared_generator, shared_generate_time, shared_nc_filepath
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dh_shared
+    where share_id = #{shareId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dh_shared
+    where share_id = #{shareId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.harvester.manage.pojo.SharedInfo" >
+    insert into dh_shared (share_id, shared_name, shared_generator, 
+      shared_generate_time, shared_nc_filepath)
+    values (#{shareId,jdbcType=VARCHAR}, #{sharedName,jdbcType=VARCHAR}, #{sharedGenerator,jdbcType=VARCHAR}, 
+      #{sharedGenerateTime,jdbcType=TIMESTAMP}, #{sharedNcFilepath,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.harvester.manage.pojo.SharedInfo" >
+    insert into dh_shared
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shareId != null" >
+        share_id,
+      </if>
+      <if test="sharedName != null" >
+        shared_name,
+      </if>
+      <if test="sharedGenerator != null" >
+        shared_generator,
+      </if>
+      <if test="sharedGenerateTime != null" >
+        shared_generate_time,
+      </if>
+      <if test="sharedNcFilepath != null" >
+        shared_nc_filepath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shareId != null" >
+        #{shareId,jdbcType=VARCHAR},
+      </if>
+      <if test="sharedName != null" >
+        #{sharedName,jdbcType=VARCHAR},
+      </if>
+      <if test="sharedGenerator != null" >
+        #{sharedGenerator,jdbcType=VARCHAR},
+      </if>
+      <if test="sharedGenerateTime != null" >
+        #{sharedGenerateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sharedNcFilepath != null" >
+        #{sharedNcFilepath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.harvester.manage.pojo.SharedInfo" >
+    update dh_shared
+    <set >
+      <if test="sharedName != null" >
+        shared_name = #{sharedName,jdbcType=VARCHAR},
+      </if>
+      <if test="sharedGenerator != null" >
+        shared_generator = #{sharedGenerator,jdbcType=VARCHAR},
+      </if>
+      <if test="sharedGenerateTime != null" >
+        shared_generate_time = #{sharedGenerateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sharedNcFilepath != null" >
+        shared_nc_filepath = #{sharedNcFilepath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where share_id = #{shareId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.harvester.manage.pojo.SharedInfo" >
+    update dh_shared
+    set shared_name = #{sharedName,jdbcType=VARCHAR},
+      shared_generator = #{sharedGenerator,jdbcType=VARCHAR},
+      shared_generate_time = #{sharedGenerateTime,jdbcType=TIMESTAMP},
+      shared_nc_filepath = #{sharedNcFilepath,jdbcType=VARCHAR}
+    where share_id = #{shareId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="query" resultMap="SharedInfoExt">
+      SELECT
+          dh_shared.share_id,
+          dh_shared.shared_name,
+          dh_shared.shared_generate_time,
+          userr.user_name shared_generator,
+          dh_shared.shared_nc_filepath,
+      IF (
+          isnull(publish1.published),
+          FALSE,
+          TRUE
+      ) AS published,
+       publish.publish_url,
+       publish.publish_dataset_name
+      FROM
+          dh_shared
+      LEFT JOIN (
+          SELECT
+              publish_resource_id,
+              publish_url,
+              publish_dataset_name
+          FROM
+              dh_publish
+      ) publish ON dh_shared.share_id = publish.publish_resource_id
+      LEFT JOIN (
+          SELECT
+              publish_resource_id,
+              publish_successful published
+          FROM
+              dh_publish
+          WHERE
+              publish_successful = 1
+      ) publish1 ON dh_shared.share_id = publish1.publish_resource_id
+      LEFT JOIN (
+          SELECT
+              user_id,
+              user_name
+          FROM
+              sys_t_user
+      ) userr ON dh_shared.shared_generator = userr.user_id
+      ORDER BY  shared_generate_time DESC
+  </select>
+</mapper>

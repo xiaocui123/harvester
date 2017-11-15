@@ -2,15 +2,14 @@ package com.harvester.manage.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Preconditions;
-import com.harvester.generator.StationSerialDataGenerator;
 import com.harvester.HarvesterConstants;
-import com.harvester.manage.io.FileUploadDownHelper;
+import com.harvester.generator.StationSerialDataGenerator;
+import com.harvester.helper.FileUploadDownHelper;
 import com.harvester.manage.mapper.BuoyInfoMapper;
 import com.harvester.manage.pojo.BuoyInfo;
 import com.harvester.manage.pojo.BuoyInfoExt;
 import com.harvester.manage.pojo.UserInfo;
 import com.harvester.manage.service.BuoyInfoService;
-import com.harvester.manage.service.PublishService;
 import com.harvester.vo.JSONResult;
 import com.harvester.vo.Page;
 import org.apache.commons.io.IOUtils;
@@ -55,7 +54,7 @@ public class BuoyController {
         File serverFile = null;
         if (!file.isEmpty()) {
             if (!file.isEmpty()) {
-                serverFile = new FileUploadDownHelper().uploadFile(file);
+                serverFile = new FileUploadDownHelper().uploadFile(file,null);
             }
         }
 

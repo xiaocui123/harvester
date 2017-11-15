@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.harvester.manage.mapper.CtdInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.harvester.manage.pojo.CtdInfo" >
+    <id column="ctd_id" property="ctdId" jdbcType="VARCHAR" />
+    <result column="ctd_name" property="ctdName" jdbcType="VARCHAR" />
+    <result column="ctd_generator" property="ctdGenerator" jdbcType="VARCHAR" />
+    <result column="ctd_generate_time" property="ctdGenerateTime" jdbcType="TIMESTAMP" />
+    <result column="ctd_nc_filepath" property="ctdNcFilepath" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="CtdInfoExt" type="com.harvester.manage.pojo.CtdInfoExt" extends="BaseResultMap">
+    <result column="publish_dataset_name" property="publishDatasetName" jdbcType="VARCHAR"/>
+    <result column="published" property="published" jdbcType="BIT"/>
+    <result column="publish_url" property="publishUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ctd_id, ctd_name, ctd_generator, ctd_generate_time, ctd_nc_filepath
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dh_ctd
+    where ctd_id = #{ctdId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dh_ctd
+    where ctd_id = #{ctdId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.harvester.manage.pojo.CtdInfo" >
+    insert into dh_ctd (ctd_id, ctd_name, ctd_generator, 
+      ctd_generate_time, ctd_nc_filepath)
+    values (#{ctdId,jdbcType=VARCHAR}, #{ctdName,jdbcType=VARCHAR}, #{ctdGenerator,jdbcType=VARCHAR}, 
+      #{ctdGenerateTime,jdbcType=TIMESTAMP}, #{ctdNcFilepath,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.harvester.manage.pojo.CtdInfo" >
+    insert into dh_ctd
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ctdId != null" >
+        ctd_id,
+      </if>
+      <if test="ctdName != null" >
+        ctd_name,
+      </if>
+      <if test="ctdGenerator != null" >
+        ctd_generator,
+      </if>
+      <if test="ctdGenerateTime != null" >
+        ctd_generate_time,
+      </if>
+      <if test="ctdNcFilepath != null" >
+        ctd_nc_filepath,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ctdId != null" >
+        #{ctdId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdName != null" >
+        #{ctdName,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdGenerator != null" >
+        #{ctdGenerator,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdGenerateTime != null" >
+        #{ctdGenerateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctdNcFilepath != null" >
+        #{ctdNcFilepath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.harvester.manage.pojo.CtdInfo" >
+    update dh_ctd
+    <set >
+      <if test="ctdName != null" >
+        ctd_name = #{ctdName,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdGenerator != null" >
+        ctd_generator = #{ctdGenerator,jdbcType=VARCHAR},
+      </if>
+      <if test="ctdGenerateTime != null" >
+        ctd_generate_time = #{ctdGenerateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctdNcFilepath != null" >
+        ctd_nc_filepath = #{ctdNcFilepath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ctd_id = #{ctdId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.harvester.manage.pojo.CtdInfo" >
+    update dh_ctd
+    set ctd_name = #{ctdName,jdbcType=VARCHAR},
+      ctd_generator = #{ctdGenerator,jdbcType=VARCHAR},
+      ctd_generate_time = #{ctdGenerateTime,jdbcType=TIMESTAMP},
+      ctd_nc_filepath = #{ctdNcFilepath,jdbcType=VARCHAR}
+    where ctd_id = #{ctdId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="query" resultMap="CtdInfoExt" >
+     SELECT
+          dh_ctd.ctd_id,
+          dh_ctd.ctd_name,
+          dh_ctd.ctd_generate_time,
+          userr.user_name ctd_generator,
+          dh_ctd.ctd_nc_filepath,
+      IF (
+          isnull(publish1.published),
+          FALSE,
+          TRUE
+      ) AS published,
+       publish.publish_url,
+       publish.publish_dataset_name
+      FROM
+          dh_ctd
+      LEFT JOIN (
+          SELECT
+              publish_resource_id,
+              publish_url,
+              publish_dataset_name
+          FROM
+              dh_publish
+      ) publish ON dh_ctd.ctd_id = publish.publish_resource_id
+      LEFT JOIN (
+          SELECT
+              publish_resource_id,
+              publish_successful published
+          FROM
+              dh_publish
+          WHERE
+              publish_successful = 1
+      ) publish1 ON dh_ctd.ctd_id = publish1.publish_resource_id
+      LEFT JOIN (
+          SELECT
+              user_id,
+              user_name
+          FROM
+              sys_t_user
+      ) userr ON dh_ctd.ctd_generator = userr.user_id
+      ORDER BY  ctd_generate_time DESC
+  </select>
+</mapper>

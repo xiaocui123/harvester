@@ -18,4 +18,7 @@ public interface HarvesterConstants {
     String RESOURCE_ROUTES_NUTRIENT_TYPE = "ROUTES_NUTRIENT";
     String RESOURCE_ROUTES_CTD="ROUTES_CTD";
 
+    String FILEEXT_NC="nc";
+    String FILEEXT_CNV="cnv";
+
 }

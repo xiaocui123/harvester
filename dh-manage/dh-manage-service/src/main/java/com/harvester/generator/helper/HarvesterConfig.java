@@ -27,6 +27,9 @@ public class HarvesterConfig {
     @Value("${ship.ctd.file.path}")
     private String sipCtdFilePath;
 
+    @Value("${shared.file.path}")
+    private String sharedFilePath;
+
     //ckan服务地址
     @Value("${ckan.url}")
     private String ckanSeverUrl;
@@ -83,6 +86,14 @@ public class HarvesterConfig {
 
     public void setSipCtdFilePath(String sipCtdFilePath) {
         this.sipCtdFilePath = sipCtdFilePath;
+    }
+
+    public String getSharedFilePath() {
+        return sharedFilePath;
+    }
+
+    public void setSharedFilePath(String sharedFilePath) {
+        this.sharedFilePath = sharedFilePath;
     }
 
     public String getCkanSeverUrl() {
