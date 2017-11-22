@@ -84,6 +84,7 @@
         <pagehelper.version>5.0.1</pagehelper.version>
         <jackan.version>0.4.2</jackan.version>
         <poi.version>3.7</poi.version>
+        <dbutils.version>1.6</dbutils.version>
         <!--插件版本变量 end-->
 
         <!--其他变量 start-->
@@ -407,6 +408,11 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbutils</groupId>
+                <artifactId>commons-dbutils</artifactId>
+                <version>${dbutils.version}</version>
             </dependency>
 
 

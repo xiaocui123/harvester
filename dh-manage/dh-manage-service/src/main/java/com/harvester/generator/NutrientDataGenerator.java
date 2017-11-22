@@ -145,7 +145,7 @@ public class NutrientDataGenerator {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("营养盐数据生成失败！"+e.getMessage(),e);
         } finally {
             if (dataFile != null) {
                 try {

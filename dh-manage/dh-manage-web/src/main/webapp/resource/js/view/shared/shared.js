@@ -102,7 +102,7 @@ $(function () {
 
     $('#file-0a').on('filebatchuploadcomplete', function (event, files, extra) {
         $("#file-0a").fileinput('reset');
-        bootbox.alert("CTD数据生成成功！");
+        bootbox.alert("国际共享数据生成成功！");
         $("#grid").bootstrapTable('refresh');
     });
 

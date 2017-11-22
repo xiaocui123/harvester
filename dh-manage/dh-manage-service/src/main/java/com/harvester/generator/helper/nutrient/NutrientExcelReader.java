@@ -29,7 +29,7 @@ public class NutrientExcelReader {
             FileInputStream excelFile = new FileInputStream(file);
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
-            String haiyu = datatypeSheet.getSheetName().substring(6);
+            String haiyu = datatypeSheet.getSheetName().substring(7);
 
             Iterator<Row> iterator = datatypeSheet.iterator();
 

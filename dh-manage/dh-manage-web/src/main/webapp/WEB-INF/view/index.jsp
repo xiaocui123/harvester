@@ -28,7 +28,7 @@
 				    </a>
                     <ul class="dropdown-menu pull-right hzp16110_dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                         <li role="presentation"><a role="menuitem" tabindex="-1"  data-toggle="modal" data-target="#myModal" href="#">修改密码</a></li>
-                        <li role="presentation"><a  href="javascript:void(0);" onclick="showAbout();">关于</a></li>
+                        <%--<li role="presentation"><a  href="javascript:void(0);" onclick="showAbout();">关于</a></li>--%>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="${ctx}/sys/logout">注销</a></li>
                        <!--  <li role="presentation" class="divider"></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;">关于</a></li> -->

@@ -3,6 +3,7 @@ package com.youmeek.ssm;
 import com.harvester.generator.AdcpNcGeneratorV2;
 import com.harvester.generator.NutrientGeoGenerator;
 import com.harvester.generator.StationSerialDataGenerator;
+import com.harvester.v2.generator.JdbcGenerator;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,13 @@ public class SSMTest {
     public void testGeoGenerator(){
         NutrientGeoGenerator generator=new NutrientGeoGenerator();
         generator.generator(new File("E:\\content\\thredds\\public\\testdata\\routes\\nutrients\\nutrients.xlsx"));
+    }
+
+    @Test
+    public void testJdbcGenerator(){
+        JdbcGenerator generator = new JdbcGenerator();
+        generator.init(new File("E://数据项目//general-config//dataset_.xml"));
+        generator.generate();
     }
 
 }

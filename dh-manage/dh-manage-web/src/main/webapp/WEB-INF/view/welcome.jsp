@@ -11,25 +11,25 @@
  </style>
 </head>
 <body>
-	<div class="tb_title"><!-- 首页 --></div>
-	<div style="font-size: 25px;font-family: 微软雅黑;width:100%;text-align: center;">欢迎使用多源海洋数据同一化处理系统</div>
-	<!-- <div style="font-size: 14px;font-family: 微软雅黑;">
-		我的工作：<br/>
-		<a href="javascript:test(1001,100101,'loginAccount=1,userName=a');" style="margin-left: 70px;">新增用户（3）</a>
-	</div> -->
-	<style>
-	.hzp161021_about {margin-top:150px;margin-left:-250px;border:0;box-shadow: 0px 0px 0px 0px #fff;}
-	
-	</style>
-	<div class="hzp161010_about hzp161021_about" >
-		<br />
-		<img src="${ctx }/resource/images/th.jpg"><h3>多源海洋数据同一化处理系统</h3>
-		<br /><br />
-		<p>开发服务：XXXXX有限公司</p>
-		<p>客服电话：<span>010-55716100</span></p>
-		<p>公司地址：XXXXXXXXXXXXXX</p>
-		<p>公司官网：<a href="http://msdc.qdio.ac.cn/" target="_blank">http://msdc.qdio.ac.cn/</a></p>
-		<p>©2017  XXXXX有限公司  All Rights Reserved</p>
-	</div>
+	<%--<div class="tb_title"><!-- 首页 --></div>--%>
+	<%--<div style="font-size: 25px;font-family: 微软雅黑;width:100%;text-align: center;">欢迎使用多源海洋数据同一化处理系统</div>--%>
+	<%--<!-- <div style="font-size: 14px;font-family: 微软雅黑;">--%>
+		<%--我的工作：<br/>--%>
+		<%--<a href="javascript:test(1001,100101,'loginAccount=1,userName=a');" style="margin-left: 70px;">新增用户（3）</a>--%>
+	<%--</div> -->--%>
+	<%--<style>--%>
+	<%--.hzp161021_about {margin-top:150px;margin-left:-250px;border:0;box-shadow: 0px 0px 0px 0px #fff;}--%>
+
+	<%--</style>--%>
+	<%--<div class="hzp161010_about hzp161021_about" >--%>
+		<%--<br />--%>
+		<%--<img src="${ctx }/resource/images/th.jpg"><h3>多源海洋数据同一化处理系统</h3>--%>
+		<%--<br /><br />--%>
+		<%--<p>开发服务：XXXXX有限公司</p>--%>
+		<%--<p>客服电话：<span>010-55716100</span></p>--%>
+		<%--<p>公司地址：XXXXXXXXXXXXXX</p>--%>
+		<%--<p>公司官网：<a href="http://msdc.qdio.ac.cn/" target="_blank">http://msdc.qdio.ac.cn/</a></p>--%>
+		<%--<p>©2017  XXXXX有限公司  All Rights Reserved</p>--%>
+	<%--</div>--%>
 </body>
 </html>
