@@ -30,6 +30,9 @@ public class HarvesterConfig {
     @Value("${shared.file.path}")
     private String sharedFilePath;
 
+    @Value("$(general.file.path)")
+    private String generalFilePath;
+
     //ckan服务地址
     @Value("${ckan.url}")
     private String ckanSeverUrl;
@@ -94,6 +97,14 @@ public class HarvesterConfig {
 
     public void setSharedFilePath(String sharedFilePath) {
         this.sharedFilePath = sharedFilePath;
+    }
+
+    public String getGeneralFilePath() {
+        return generalFilePath;
+    }
+
+    public void setGeneralFilePath(String generalFilePath) {
+        this.generalFilePath = generalFilePath;
     }
 
     public String getCkanSeverUrl() {

@@ -5,8 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.harvester.HarvesterConstants;
-import com.harvester.generator.helper.HarvesterConfig;
-import com.harvester.generator.helper.SpringContextUtil;
+import com.harvester.manage.pojo.DataSetInfo;
 import com.harvester.v2.config.DataSet;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -20,9 +19,6 @@ import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFileWriter;
 import ucar.nc2.Variable;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -39,32 +35,25 @@ import java.util.UUID;
  * jdbc生成NC器
  * Created by cui on 2017/11/21.
  */
-public class JdbcGenerator {
+public class JdbcGenerator extends AbstractGenerator {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private DataSet dataSet;
-
-    private String rootDirPath;
-
-    public void init(File configFile) {
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(DataSet.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            this.dataSet = (DataSet) jaxbUnmarshaller.unmarshal(configFile);
-        } catch (JAXBException e) {
-            logger.error("初始化配置信息失败！", e);
-        }
+    public JdbcGenerator(DataSet dataSet) {
+        super(dataSet);
     }
 
-    public void generate() {
+    @Override
+    public DataSetInfo generate() {
+        DataSetInfo newDataSet = new DataSetInfo();
+        String uuid = UUID.randomUUID().toString();
+        newDataSet.setDatasetId(uuid);
+        newDataSet.setDatasetName(dataSet.getDatasetName());
+
         NetcdfFileWriter dataFile = null;
         try (Connection connection = getConnection()) {
-            HarvesterConfig harvesterConfig = (HarvesterConfig) SpringContextUtil.getBean("harvesterconfig");
-            this.rootDirPath = harvesterConfig.getBuoyFilePath();
-
-            String ncFilePath = rootDirPath + UUID.randomUUID().toString() + File.separator + dataSet.getDatasetName() + ".nc";
-
+            String ncFilePath = rootDirPath + uuid + File.separator + dataSet.getDatasetName() + ".nc";
+            newDataSet.setDatasetNcFilepath(ncFilePath);
             try {
                 Files.createParentDirs(new File(ncFilePath));
             } catch (IOException e) {
@@ -99,6 +88,8 @@ public class JdbcGenerator {
                 }
             }
         }
+
+        return newDataSet;
     }
 
     private void doNcDataWrite(Connection connection, NetcdfFileWriter dataFile, List<Double> lstTime) throws IOException, InvalidRangeException, SQLException {
@@ -157,7 +148,14 @@ public class JdbcGenerator {
             public List<Double> handle(ResultSet rs) throws SQLException {
                 List<Double> lstData = Lists.newArrayList();
                 while (rs.next()) {
-                    lstData.add(rs.getDouble(2));
+                    String datatime = rs.getString(1);
+                    double value = -999.9;
+                    try {
+                        value = rs.getDouble(2);
+                    } catch (Exception e) {
+                        logger.info("station=【" + dataSet.getStation().getStationVariable().getName() + "】datatime=【" + datatime + "】数据不标准,使用默认值-999.9代替！");
+                    }
+                    lstData.add(value);
                 }
                 return lstData;
             }
@@ -297,11 +295,4 @@ public class JdbcGenerator {
             throw new IllegalArgumentException(e);
         }
     }
-
-    public static void main(String[] args) {
-        JdbcGenerator generator = new JdbcGenerator();
-        generator.init(new File("E://数据项目//general-config//dataset.xml"));
-        generator.generate();
-    }
-
 }
