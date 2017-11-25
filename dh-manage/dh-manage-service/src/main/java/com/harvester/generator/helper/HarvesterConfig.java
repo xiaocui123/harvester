@@ -30,7 +30,7 @@ public class HarvesterConfig {
     @Value("${shared.file.path}")
     private String sharedFilePath;
 
-    @Value("$(general.file.path)")
+    @Value("${general.file.path}")
     private String generalFilePath;
 
     //ckan服务地址

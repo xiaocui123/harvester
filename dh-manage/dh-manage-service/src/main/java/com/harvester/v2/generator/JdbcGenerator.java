@@ -50,6 +50,12 @@ public class JdbcGenerator extends AbstractGenerator {
         newDataSet.setDatasetId(uuid);
         newDataSet.setDatasetName(dataSet.getDatasetName());
 
+        //TODO
+        String jdbcType=dataSet.getSource().getJdbcType().getDriver();
+        if(jdbcType.equals("2001")){
+            dataSet.getSource().getJdbcType().setDriver("net.ucanaccess.jdbc.UcanaccessDriver");
+        }
+
         NetcdfFileWriter dataFile = null;
         try (Connection connection = getConnection()) {
             String ncFilePath = rootDirPath + uuid + File.separator + dataSet.getDatasetName() + ".nc";

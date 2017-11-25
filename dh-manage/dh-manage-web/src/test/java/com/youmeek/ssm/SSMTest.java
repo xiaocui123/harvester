@@ -3,11 +3,14 @@ package com.youmeek.ssm;
 import com.harvester.generator.AdcpNcGeneratorV2;
 import com.harvester.generator.NutrientGeoGenerator;
 import com.harvester.generator.StationSerialDataGenerator;
+import com.harvester.manage.mapper.UserInfoMapper;
+import com.harvester.manage.pojo.UserInfo;
 import com.harvester.v2.generator.ExcelGenerator;
 import com.harvester.v2.generator.JdbcGenerator;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,6 +21,9 @@ import java.io.File;
 public class SSMTest {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
+
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
 
     @Test
@@ -45,16 +51,25 @@ public class SSMTest {
 
     @Test
     public void testJdbcGenerator(){
-        JdbcGenerator generator = new JdbcGenerator();
-        generator.init(new File("E://数据项目//general-config//dataset_.xml"));
-        generator.generate();
+//        JdbcGenerator generator = new JdbcGenerator();
+//        generator.init(new File("E://数据项目//general-config//dataset_.xml"));
+//        generator.generate();
     }
 
     @Test
     public void testExcelGenerator(){
-        ExcelGenerator generator=new ExcelGenerator();
-        generator.init(new File("E://数据项目//general-config//dataset_excel.xml"));
-        generator.generate();
+//        ExcelGenerator generator=new ExcelGenerator();
+//        generator.init(new File("E://数据项目//general-config//dataset_excel.xml"));
+//        generator.generate();
+    }
+
+    @Test
+    public void testCheckUser(){
+        UserInfo user=new UserInfo();
+        user.setUserAccount("admin");
+        user.setUserPsw("96e79218965eb72c92a549dd5a330112");
+        UserInfo tmp=userInfoMapper.checkUser(user);
+        System.out.println(tmp);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.harvester.manage.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DataSetInfo {
@@ -10,10 +11,13 @@ public class DataSetInfo {
     private String datasetGenerator;
 
     private Date datasetGenerateTime;
+    private String datasetGenerateTimeStr;
 
     private String datasetConfigFilepath;
 
     private String datasetNcFilepath;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public String getDatasetId() {
         return datasetId;
@@ -45,6 +49,17 @@ public class DataSetInfo {
 
     public void setDatasetGenerateTime(Date datasetGenerateTime) {
         this.datasetGenerateTime = datasetGenerateTime;
+        if(datasetGenerateTime!=null){
+            datasetGenerateTimeStr=sdf.format(datasetGenerateTime);
+        }
+    }
+
+    public String getDatasetGenerateTimeStr() {
+        return datasetGenerateTimeStr;
+    }
+
+    public void setDatasetGenerateTimeStr(String datasetGenerateTimeStr) {
+        this.datasetGenerateTimeStr = datasetGenerateTimeStr;
     }
 
     public String getDatasetConfigFilepath() {

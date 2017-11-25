@@ -1,12 +1,15 @@
 package com.harvester.manage.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.harvester.HarvesterConstants;
 import com.harvester.manage.mapper.DataSetInfoMapper;
 import com.harvester.manage.pojo.BuoyInfoExt;
 import com.harvester.manage.pojo.DataSetInfo;
 import com.harvester.manage.pojo.DataSetInfoExt;
+import com.harvester.manage.pojo.NutrientInfo;
+import com.harvester.manage.service.DataSetService;
 import com.harvester.v2.config.DataSet;
 import com.harvester.v2.generator.AbstractGenerator;
 import com.harvester.v2.generator.ExcelGenerator;
@@ -19,12 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -40,6 +44,14 @@ public class DataSetController {
 
     @Autowired
     private DataSetInfoMapper dataSetInfoMapper;
+
+    @Autowired
+    private DataSetService dataSetService;
+
+    @RequestMapping("init")
+    public String init(){
+        return "dataset/dataset";
+    }
 
     @RequestMapping("create")
     @ResponseBody
@@ -118,4 +130,48 @@ public class DataSetController {
         page.setRows(lstDataSet);
         return page;
     }
+
+    @RequestMapping("downloadFile")
+    public void downloadFile(@RequestParam(value = "datasetId") String datasetId,
+                             HttpServletResponse response) throws UnsupportedEncodingException {
+        DataSetInfo datase = dataSetInfoMapper.selectByPrimaryKey(datasetId);
+        Preconditions.checkArgument(datase != null);
+        String absolutePath = datase.getDatasetNcFilepath();
+        File file = new File(absolutePath);
+        String filename = absolutePath.substring(file.getAbsolutePath().lastIndexOf(File.separator) + 1);
+        // 清空response
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName=" + new String(filename.getBytes("utf-8"), "ISO8859-1"));
+        try {
+            InputStream inputStream = new FileInputStream(file.getAbsolutePath());
+            OutputStream os = response.getOutputStream();
+            byte[] b = new byte[4 * 1024];
+            int length;
+            while ((length = inputStream.read(b)) > 0) {
+                os.write(b, 0, length);
+            }
+            inputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("delete")
+    @ResponseBody
+    public JSONResult delete(@RequestBody List<String> lstDatasetId) {
+        JSONResult result = new JSONResult();
+        try {
+            dataSetService.delete(lstDatasetId);
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
 }
+

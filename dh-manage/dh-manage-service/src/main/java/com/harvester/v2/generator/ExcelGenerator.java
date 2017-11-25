@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.harvester.HarvesterConstants;
+import com.harvester.manage.pojo.DataSetInfo;
 import com.harvester.v2.config.DataSet;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -60,10 +61,14 @@ public class ExcelGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void generate() {
+    public DataSetInfo generate() {
+        DataSetInfo dataSetInfo = new DataSetInfo();
+        String uuid = UUID.randomUUID().toString();
+        dataSetInfo.setDatasetId(uuid);
         NetcdfFileWriter dataFile = null;
         try {
-            String ncFilePath = rootDirPath + UUID.randomUUID().toString() + File.separator + dataSet.getDatasetName() + ".nc";
+            String ncFilePath = rootDirPath + uuid + File.separator + dataSet.getDatasetName() + ".nc";
+            dataSetInfo.setDatasetNcFilepath(ncFilePath);
             try {
                 Files.createParentDirs(new File(ncFilePath));
             } catch (IOException e) {
@@ -94,6 +99,7 @@ public class ExcelGenerator extends AbstractGenerator {
                 }
             }
         }
+        return dataSetInfo;
     }
 
     private List<Double> getTime() throws IOException, ParseException {

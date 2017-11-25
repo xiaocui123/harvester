@@ -35,6 +35,9 @@ public class PublishServiceImpl implements PublishService {
     private CtdInfoMapper ctdInfoMapper;
 
     @Autowired
+    private DataSetInfoMapper dataSetInfoMapper;
+
+    @Autowired
     private HarvesterConfig harvesterConfig;
 
     @Autowired
@@ -96,6 +99,12 @@ public class PublishServiceImpl implements PublishService {
             CtdInfo ctdInfo = ctdInfoMapper.selectByPrimaryKey(resourceId);
             String filePath = ctdInfo.getCtdNcFilepath();
             return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+        } else if (HarvesterConstants.RESOURCE_GENERAL.equals(publishResourceType)) {
+            //通用数据集
+            DataSetInfo dataSetInfo = dataSetInfoMapper.selectByPrimaryKey(resourceId);
+            String filePath = dataSetInfo.getDatasetNcFilepath();
+            return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+
         }
         throw new IllegalArgumentException("不支持【" + publishResourceType + "】资源类型的数据发布！");
     }
@@ -114,6 +123,9 @@ public class PublishServiceImpl implements PublishService {
         } else if (HarvesterConstants.RESOURCE_ROUTES_CTD.equals(resourceType)) {
             //船基调查-CTD
             relativePath = "test/routes/ctd/" + publishInfo.getPublishResourceId() + "/" + fileName;
+        } else if (HarvesterConstants.RESOURCE_GENERAL.equals(resourceType)) {
+            //通用数据集
+            relativePath = "test/general/" + publishInfo.getPublishResourceId() + "/" + fileName;
         } else {
             throw new IllegalArgumentException("不支持【" + resourceType + "】资源类型的数据发布！");
         }
